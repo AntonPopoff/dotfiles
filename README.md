@@ -1,10 +1,17 @@
+## dotfiles
+
 This repository contains personal collection of dotfiles, managed with [chezmoi](https://github.com/twpayne/chezmoi).
 
-It includes configurations for:
+*To use dotfiles without `chezmoi` replace `dot_` with `.` and place them into `$HOME` dir.*
 
-* Alacritty
+## Configs
+
+#### ~/ (dot_*)
 * zsh
 * tmux
-* Neovim
 * IdeaVim
+
+#### ~/.config/ (dot_config/*)
+* Alacritty
+* Neovim
 
