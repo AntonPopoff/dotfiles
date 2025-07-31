@@ -1,0 +1,43 @@
+# Aliases
+alias vi='nvim'
+alias vim='nvim'
+alias ls='ls --color=auto'
+
+# Set custom zsh prompt
+setopt PROMPT_SUBST
+PROMPT=$'%B%F{blue}$(print -rD $PWD) >%f%b '
+
+# Fuzzy cd
+function jf {
+    local start_location=''
+
+    if [[ -n "$1" ]]; then
+        start_location="$1"
+    else
+        start_location="$HOME"
+    fi
+
+    local target_dir="$(fd --type directory . "$start_location" | fzf)"
+
+    if [[ -n "$target_dir" ]]; then
+        cd "$target_dir"
+    fi
+}
+
+# Fuzzy find and edit (nvim)
+function ef {
+    local start_location=''
+
+    if [[ -n "$1" ]]; then
+        start_location="$1"
+    else
+        start_location="$HOME"
+    fi
+
+    local target_file="$(fd . "$start_location" | fzf)"
+
+    if [[ -n "$target_file" ]]; then
+        nvim "$target_file"
+    fi
+}
+

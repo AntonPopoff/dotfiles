@@ -1,0 +1,7 @@
+[general]
+import = ["kanagawa_dragon.toml"]
+
+[window]
+padding.x = 5
+padding.y = 5
+
