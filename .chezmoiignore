@@ -1,0 +1,3 @@
+# Ignore Lazy plugin manager lock file
+**/lazy-lock.json
+
