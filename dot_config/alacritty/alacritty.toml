@@ -5,25 +5,24 @@ import = ["kanagawa_dragon.toml"]
 padding.x = 5
 padding.y = 5
 
-# [mouse]
-# hide_when_typing = true
-# 
-# [font]
-# size = 16
-# 
-# [font.normal]
-# family = "Google Sans Code"
-# style = "Light"
-# 
-# [font.bold]
-# family = "Google Sans Code"
-# style = "SemiBold"
-# 
-# [font.italic]
-# family = "Google Sans Code"
-# style = "Light Italic"
-# 
-# [font.bold_italic]
-# family = "Google Sans Code"
-# style = "SemiBold Italic"
-# 
+[mouse]
+hide_when_typing = true
+
+[font]
+size = 12
+
+[font.normal]
+family = "Google Sans Code"
+style = "Light"
+
+[font.bold]
+family = "Google Sans Code"
+style = "SemiBold"
+
+[font.italic]
+family = "Google Sans Code"
+style = "Light Italic"
+
+[font.bold_italic]
+family = "Google Sans Code"
+style = "SemiBold Italic"
