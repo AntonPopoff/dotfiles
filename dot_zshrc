@@ -17,7 +17,7 @@ function jf {
         start_location="$HOME"
     fi
 
-    local target_dir="$(fd --type directory . "$start_location" | fzf)"
+    local target_dir="$(fd --hidden --type directory . "$start_location" | fzf)"
 
     if [[ -n "$target_dir" ]]; then
         cd "$target_dir"
@@ -34,10 +34,28 @@ function ef {
         start_location="$HOME"
     fi
 
-    local target_file="$(fd . "$start_location" | fzf)"
+    local target_file="$(fd --hidden --type file . "$start_location" | fzf)"
 
     if [[ -n "$target_file" ]]; then
         nvim "$target_file"
+    fi
+}
+
+# Interactive Git Switch Branch via fzf
+function gsb() {
+
+    # Show branches including remote
+    # Remove leading spaces and asterisks
+    # Remove duplicated branch names
+    # Feed the output to fzf
+    local target=$(git branch --all | \
+        sed -E 's/^\*?\s{1,2}//' | \
+        sed -E 's/remotes\/origin\///' | \
+        awk '!branches[$0]++' | \
+        fzf)
+
+    if [[ -n $target ]]; then
+        git switch $target
     fi
 }
 
