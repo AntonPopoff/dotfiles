@@ -4,6 +4,7 @@ import = ["kanagawa_dragon.toml"]
 [window]
 padding.x = 5
 padding.y = 5
+opacity = 0.85
 
 [mouse]
 hide_when_typing = true
@@ -12,17 +13,5 @@ hide_when_typing = true
 size = 12
 
 [font.normal]
-family = "Google Sans Code"
-style = "Light"
+family = "Fira Code"
 
-[font.bold]
-family = "Google Sans Code"
-style = "SemiBold"
-
-[font.italic]
-family = "Google Sans Code"
-style = "Light Italic"
-
-[font.bold_italic]
-family = "Google Sans Code"
-style = "SemiBold Italic"
