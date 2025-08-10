@@ -1,0 +1,70 @@
+syntax on		    " syntax highlighting
+set ruler		    " show the cursor position all the time
+set showcmd		    " display incomplete commands
+set wildmenu		" display completion matches in a status line
+set number          " show line numbers
+set relativenumber	" display relative line numbers
+set scrolloff=5		" keep at least 5 lines above and below the cursor
+set history=200		" keep 200 lines of command line history
+set laststatus=2	" display the status line at the bottom
+set ignorecase		" ignore case during search operations
+set encoding=utf-8	" set vim-wide UTF-8 encoding
+set cursorline		" Highlight the current line
+set incsearch		" Do incremental searching
+set hlsearch		" Highlight search result
+
+" tabs and indentation settings
+set expandtab 		" use space characters instead of tabs
+set softtabstop=4	" insert 4 spaces when tab button pressed
+set shiftwidth=4	" use 4 spaces for indentation
+
+" map the leader key
+nnoremap <Space> <nop>
+let mapleader=" "
+
+" oS clipboard yank mappings
+vnoremap <Leader>oy "+y 
+vnoremap <Leader>oy "+y
+nnoremap <Leader>oyy "+yy
+
+" oS clipboard paste mappings
+noremap <Leader>op "+p
+
+" delete to void register and paste
+vnoremap <Leader>p "_dp
+
+" disable the arrow keys just in case
+noremap <Left> <nop>
+noremap <Right> <nop>
+noremap <Up> <nop>
+noremap <Down> <nop>
+
+" disable search highlighting temporary when <Esc> is hit
+nnoremap <silent> <Leader>so :nohlsearch<CR>
+
+" center cursor when searching
+nmap n nzz
+nmap N Nzz
+
+" center cursor when scrolling text
+nmap <C-d> <C-d>zz
+nmap <C-u> <C-u>zz
+
+" map search actions to vim keys (Android Studio/Idea Actions)
+nmap <C-c> <Action>(EditorEscape)
+nmap <Leader>pf <Action>(SearchEverywhere)
+nmap <Leader>pg <Action>(FindInPath)
+
+" map format actions (Android Studio/Idea Actions)
+nmap <F3> <Action>(ShowReformatFileDialog)
+xmap <F3> <Action>(ShowReformatFileDialog)
+
+" map Run & Debug keys
+nmap <F5> <Action>(Debug)
+nmap <S-F5> <Action>(Stop)
+nmap <F6> <Action>(Resume)
+
+" toggle breakpoints (Android Studio/Idea actions)
+nmap <Leader>b <Action>(ToggleLineBreakpoint)
+nmap <Leader>c <Action>(AddConditionalBreakpoint)
+
