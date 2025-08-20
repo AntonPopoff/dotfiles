@@ -61,10 +61,12 @@ function parse_git_branch() {
     fi
 }
 
-# Aliases
+# Neovim Aliases
 alias vi='nvim'
 alias vim='nvim'
-alias ls='ls --color=auto'
+
+# Make ls colorize output and show human readable sizes by default
+alias ls='ls --human-readable --color=auto'
 
 # Make zsh autocomplete git commands
 autoload -Uz compinit && compinit
