@@ -25,7 +25,8 @@ function ef {
         start_location="$HOME"
     fi
 
-    local target_file="$(fd --hidden --type file . "$start_location" | fzf)"
+    local target_file="$(fd --hidden --type file . "$start_location" | \ 
+        fzf --preview 'bat --color=always --number --theme="ansi" {}')"
 
     if [[ -n "$target_file" ]]; then
         nvim "$target_file"
@@ -67,6 +68,8 @@ alias vim='nvim'
 
 # Make ls colorize output and show human readable sizes by default
 alias ls='ls --human-readable --color=auto'
+
+alias cat='bat --theme="ansi" --number'
 
 # Make zsh autocomplete git commands
 autoload -Uz compinit && compinit
