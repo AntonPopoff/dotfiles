@@ -1,4 +1,6 @@
 # Ignore Lazy plugin manager lock file
 **/lazy-lock.json
-**/README.md
+
+# Ignore README file
+README.md
 
