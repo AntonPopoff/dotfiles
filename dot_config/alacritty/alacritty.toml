@@ -10,7 +10,7 @@ opacity = 0.85
 hide_when_typing = true
 
 [font]
-size = 12
+size = 16
 
 [font.normal]
 family = "Fira Code"
