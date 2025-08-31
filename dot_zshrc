@@ -25,8 +25,7 @@ function ef {
         start_location="$HOME"
     fi
 
-    local target_file="$(fd --hidden --type file . "$start_location" | \ 
-        fzf --preview 'bat --color=always --number --theme="ansi" {}')"
+    local target_file=$(fd --hidden --type file . "$start_location" | fzf --preview 'bat --color=always --number --theme="ansi" {}')
 
     if [[ -n "$target_file" ]]; then
         nvim "$target_file"
