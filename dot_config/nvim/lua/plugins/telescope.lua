@@ -17,7 +17,6 @@ return {
                     },
                 },
             })
-            -- Load C Fzf extension to make telescope even faster
             telescope.load_extension("fzf")
         end,
         keys = {
@@ -31,7 +30,6 @@ return {
         }
     },
     {
-        -- Telescope extension to make fzf even faster
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
         lazy = true,
