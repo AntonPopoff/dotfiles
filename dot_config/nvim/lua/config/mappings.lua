@@ -1,7 +1,7 @@
 -- Vim bindings start
 
 -- Disable some nasty keys before doing everything else
--- Disable "Space" key
+-- Disable 'Space' key
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<nop>')
 
 -- Disable arrow keys

@@ -11,3 +11,4 @@ vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 vim.opt.smarttab = true
 vim.opt.undofile = true
+vim.opt.signcolumn = 'yes:1'
