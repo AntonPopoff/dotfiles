@@ -1,11 +1,9 @@
 return {
     'stevearc/oil.nvim',
     lazy = true,
-    config = function()
-        require('oil').setup({
-            view_options = { show_hidden = true, },
-        })
-    end,
+    opts = {
+        view_options = { show_hidden = true, },
+    },
     keys = {
         { '<Leader>e', vim.cmd.Oil, mode = 'n' },
     },

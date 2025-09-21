@@ -4,7 +4,6 @@ return {
         build = ':TSUpdate',
         branch = 'master',
         lazy = false,
-
         config = function()
             require('nvim-treesitter.configs').setup {
                 ensure_installed = {},

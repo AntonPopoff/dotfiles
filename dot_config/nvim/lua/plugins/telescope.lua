@@ -2,7 +2,6 @@ return {
     {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.5',
-        dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             local telescope = require('telescope')
             telescope.setup({
@@ -27,11 +26,14 @@ return {
             { '<Leader>pr', '<cmd>Telescope registers<cr>',      mode = 'n' },
             { '<Leader>ph', '<cmd>Telescope help_tags<cr>',      mode = 'n' },
             { '<Leader>lr', '<cmd>Telescope lsp_references<cr>', mode = 'n' },
-        }
+        },
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            {
+                'nvim-telescope/telescope-fzf-native.nvim',
+                build = 'make',
+                lazy = true,
+            }
+        },
     },
-    {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make',
-        lazy = true,
-    }
 }
