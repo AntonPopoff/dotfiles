@@ -12,3 +12,4 @@ vim.opt.softtabstop = 4
 vim.opt.smarttab = true
 vim.opt.undofile = true
 vim.opt.signcolumn = 'yes:1'
+vim.diagnostic.config({ virtual_text = true })
