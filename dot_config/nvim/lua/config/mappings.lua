@@ -54,3 +54,9 @@ vim.keymap.set({ 'n' }, '<C-b>', '<C-b>zz')
 vim.keymap.set({ 'n' }, 'n', 'nzz')
 vim.keymap.set({ 'n' }, 'N', 'Nzz')
 
+-- Lsp mappings
+
+-- Format an entire buffer
+vim.keymap.set({ 'n' }, '<Leader>lf', vim.lsp.buf.format)
+-- Disable Omni completion mapping because we use blink.cmp
+vim.keymap.set({ 'i' }, '<C-x><C-o>', '<Nop>')
