@@ -1,8 +1,7 @@
 -- Vim bindings start
 
--- Disable some nasty keys before doing everything else
--- Disable 'Space' key
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<nop>')
+-- Disable some keys before doing everything else
+vim.keymap.set({ 'n', 'v' }, '<Space>', '<nop>') -- Disable 'Space' key
 
 -- Disable arrow keys
 vim.keymap.set({ 'n', 'i', 'v' }, '<Down>', '<Nop>')
@@ -17,7 +16,7 @@ vim.keymap.set({ 'v', 'n' }, '<Leader>op', '\"+p') -- Paste from OS clipboard af
 vim.keymap.set({ 'v', 'n' }, '<Leader>oP', '\"+P') -- Paste from OS clipboard before the cursor
 
 -- Vim clipboard mapping
-vim.keymap.set({ 'v' }, '<Leader>P', '"_dP')
+vim.keymap.set({ 'v' }, '<Leader>P', '"_dP') -- Delete without putting content into a register
 
 -- Disable search highlighting
 vim.keymap.set({ 'n' }, '<Leader>so', ':nohlsearch<CR>')
@@ -27,14 +26,14 @@ vim.keymap.set({ 'n' }, '<Leader>sv', ':vsplit<CR>') -- Open vertical split pane
 vim.keymap.set({ 'n' }, '<Leader>sh', ':split<CR>')  -- Open horizontal split pane
 vim.keymap.set({ 'n' }, '<Leader>t', ':tabe<CR>')    -- Open a new tab
 
--- Split panes navigation mappings
+-- Split panes navigation mappings <Leader> shortcuts
 vim.keymap.set({ 'n' }, '<Leader>j', '<C-w>j')
 vim.keymap.set({ 'n' }, '<Leader>k', '<C-w>k')
 vim.keymap.set({ 'n' }, '<Leader>h', '<C-w>h')
 vim.keymap.set({ 'n' }, '<Leader>l', '<C-w>l')
 vim.keymap.set({ 'n' }, '<Leader>r', '<C-w>r')
 
--- Resize panes mappings
+-- Resize panes mappings <Leader> shortcuts
 vim.keymap.set({ 'n' }, '<Leader>=', '<C-w>=')
 vim.keymap.set({ 'n' }, '<M-=>', '3<C-w>+')
 vim.keymap.set({ 'n' }, '<M-->', '3<C-w>-')
