@@ -57,6 +57,6 @@ vim.keymap.set({ 'n' }, 'N', 'Nzz')
 -- Lsp mappings
 
 -- Format an entire buffer
-vim.keymap.set({ 'n' }, '<Leader>lf', vim.lsp.buf.format)
+vim.keymap.set({ 'n' }, '<Leader>fc', vim.lsp.buf.format)
 -- Disable Omni completion mapping because we use blink.cmp
 vim.keymap.set({ 'i' }, '<C-x><C-o>', '<Nop>')

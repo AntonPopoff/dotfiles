@@ -19,13 +19,10 @@ return {
             telescope.load_extension('fzf')
         end,
         keys = {
-            { '<Leader>pf', '<cmd>Telescope find_files<cr>',     mode = 'n' },
-            { '<Leader>pg', '<cmd>Telescope live_grep<cr>',      mode = 'n' },
-            { '<Leader>pb', '<cmd>Telescope buffers<cr>',        mode = 'n' },
-            { '<Leader>pm', '<cmd>Telescope marks<cr>',          mode = 'n' },
-            { '<Leader>pr', '<cmd>Telescope registers<cr>',      mode = 'n' },
-            { '<Leader>ph', '<cmd>Telescope help_tags<cr>',      mode = 'n' },
-            { '<Leader>lr', '<cmd>Telescope lsp_references<cr>', mode = 'n' },
+            { '<Leader>ff', '<cmd>Telescope find_files<cr>',     mode = 'n' },
+            { '<Leader>fg', '<cmd>Telescope live_grep<cr>',      mode = 'n' },
+            { '<Leader>fm', '<cmd>Telescope marks<cr>',          mode = 'n' },
+            { '<Leader>fr', '<cmd>Telescope lsp_references<cr>', mode = 'n' },
         },
         dependencies = {
             'nvim-lua/plenary.nvim',
