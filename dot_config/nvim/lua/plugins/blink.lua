@@ -5,7 +5,9 @@ return {
         opts = {
             keymap = { preset = 'enter' },
             completion = {
-                list = { selection = { preselect = true, auto_insert = false } };
+                list = { selection = { 
+                    preselect = true, auto_insert = false 
+                } };
                 ghost_text = { enabled = false },
                 documentation = { auto_show = false },
             },
