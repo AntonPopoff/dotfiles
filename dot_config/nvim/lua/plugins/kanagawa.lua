@@ -9,8 +9,9 @@ return {
             compile = true,
             overrides = function(colors)
                 local theme = colors.theme
+
+                -- Tweak some Telescope window colors
                 return {
-                    -- Tweak some Telescope window colors
                     EndOfBuffer = { fg = theme.ui.nontext, bg = theme.ui.bg_gutter },
                     NonText = { fg = theme.ui.nontext, bg = theme.ui.bg_gutter },
                     TelescopeTitle = { fg = theme.ui.special, bold = true },
