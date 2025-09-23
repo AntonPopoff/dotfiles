@@ -3,10 +3,22 @@ return {
         'rebelot/kanagawa.nvim',
         lazy = false,
         opts = {
-            theme = 'dragon',
-            background = 'none',
-            transparent = true,
             compile = true,
+            transparent = true,
+            colors = {
+                theme = {
+                    all = {
+                        ui = {
+                            -- Remove line numbers column background
+                            bg_p2 = 'none',
+                            -- Remove status line background
+                            bg_m3 = 'none',
+                            -- Remove cursor line background
+                            bg_gutter = 'none',
+                        }
+                    }
+                }
+            },
             overrides = function(colors)
                 local theme = colors.theme
 
@@ -14,6 +26,7 @@ return {
                 return {
                     EndOfBuffer = { fg = theme.ui.nontext, bg = theme.ui.bg_gutter },
                     NonText = { fg = theme.ui.nontext, bg = theme.ui.bg_gutter },
+                    -- Remove background color from Telescope borders to make it work with transparent background
                     TelescopeTitle = { fg = theme.ui.special, bold = true },
                     TelescopeResultsBorder = { fg = theme.ui.nontext, bg = 'none' },
                     TelescopePreviewBorder = { fg = theme.ui.nontext, bg = 'none' },
@@ -23,15 +36,6 @@ return {
                     TelescopePreviewNormal = { bg = 'none' },
                 }
             end
-        },
-        colors = {
-            theme = {
-                all = {
-                    ui = {
-                        bg_gutter = 'none', bg_p2 = 'none'
-                    }
-                }
-            }
         },
     },
 }

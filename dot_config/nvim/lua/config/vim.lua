@@ -16,10 +16,12 @@ vim.o.undofile = true       -- Persist undo file between Vim sessions
 vim.o.signcolumn = 'yes'    -- Always reserve and show one column for signs (LSP warnings/errors)
 vim.o.winborder = 'rounded' -- Enable rounded borders around floating windows
 
+-- Enable cursorline to make current line number highlighted by Kanagawa theme
+-- At the same cursorline background is disabled in Kanagawa config
+vim.o.cursorline = true
+
 -- LSP options
 vim.diagnostic.config({ virtual_text = true }) -- Show diagnostic messages as virtual text after the code
 
--- Color scheme settings
-vim.cmd('colorscheme kanagawa')
--- Remove status line background
-vim.cmd(':hi statusline guibg=NONE')
+-- Enable Kanagawa Dragon color scheme
+vim.cmd('colorscheme kanagawa-dragon')
