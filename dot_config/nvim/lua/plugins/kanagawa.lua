@@ -10,8 +10,6 @@ return {
                     ui = {
                         -- Remove line numbers column background
                         bg_p2 = 'none',
-                        -- Remove status line background
-                        bg_m3 = 'none',
                         -- Remove cursor line background
                         bg_gutter = 'none',
                     }
