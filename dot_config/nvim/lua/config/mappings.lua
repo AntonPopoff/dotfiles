@@ -25,13 +25,14 @@ vim.keymap.set({ 'n' }, '<Leader>so', ':nohlsearch<CR>')
 vim.keymap.set({ 'n' }, '<Leader>sv', ':vsplit<CR>') -- Open vertical split pane
 vim.keymap.set({ 'n' }, '<Leader>sh', ':split<CR>')  -- Open horizontal split pane
 vim.keymap.set({ 'n' }, '<Leader>t', ':tabe<CR>')    -- Open a new tab
+vim.keymap.set({ 'n' }, '<Leader>q', ':q<CR>')       -- Close a buffer
 
 -- Split panes navigation mappings <Leader> shortcuts
 vim.keymap.set({ 'n' }, '<Leader>j', '<C-w>j')
 vim.keymap.set({ 'n' }, '<Leader>k', '<C-w>k')
 vim.keymap.set({ 'n' }, '<Leader>h', '<C-w>h')
 vim.keymap.set({ 'n' }, '<Leader>l', '<C-w>l')
-vim.keymap.set({ 'n' }, '<Leader>r', '<C-w>r')
+vim.keymap.set({ 'n' }, '<Leader>r', '<C-w>r') -- Rotate split panes
 
 -- Resize panes mappings <Leader> shortcuts
 vim.keymap.set({ 'n' }, '<Leader>=', '<C-w>=')
