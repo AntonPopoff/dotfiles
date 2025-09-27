@@ -10,8 +10,8 @@ vim.keymap.set({ 'n', 'i', 'v' }, '<Left>', '<Nop>')
 vim.keymap.set({ 'n', 'i', 'v' }, '<Right>', '<Nop>')
 
 -- OS clipboard mappings
-vim.keymap.set({ 'v', 'n' }, '<Leader>oy', '\"+y') -- Copy to OS clipboard in visual mode
-vim.keymap.set({ 'n' }, '<Leader>oyy', '\"+yy')    -- Copy to OS clipboard an entire line in normal mode
+vim.keymap.set({ 'v', 'n' }, '<Leader>y', '\"+y') -- Copy to OS clipboard in visual mode
+vim.keymap.set({ 'n' }, '<Leader>yy', '\"+yy')    -- Copy to OS clipboard an entire line in normal mode
 vim.keymap.set({ 'v', 'n' }, '<Leader>op', '\"+p') -- Paste from OS clipboard after the cursor
 vim.keymap.set({ 'v', 'n' }, '<Leader>oP', '\"+P') -- Paste from OS clipboard before the cursor
 
@@ -19,7 +19,7 @@ vim.keymap.set({ 'v', 'n' }, '<Leader>oP', '\"+P') -- Paste from OS clipboard be
 vim.keymap.set({ 'v' }, '<Leader>P', '"_dP') -- Delete without putting content into a register
 
 -- Disable search highlighting
-vim.keymap.set({ 'n' }, '<Leader>so', ':nohlsearch<CR>')
+vim.keymap.set({ 'n' }, '<Leader>/', ':nohlsearch<CR>')
 
 -- Panes and tabs mappings
 vim.keymap.set({ 'n' }, '<Leader>sv', ':vsplit<CR>') -- Open vertical split pane
