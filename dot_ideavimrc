@@ -22,13 +22,12 @@ set shiftwidth=4	" use 4 spaces for indentation
 nnoremap <Space> <nop>
 let mapleader=" "
 
-" oS clipboard yank mappings
-vnoremap <Leader>oy "+y 
-vnoremap <Leader>oy "+y
-nnoremap <Leader>oyy "+yy
+" OS clipboard yank mappings
+nnoremap <Leader>y "+y
+nnoremap <Leader>yy "+yy
 
-" oS clipboard paste mappings
-noremap <Leader>op "+p
+" OS clipboard paste mappings
+noremap <Leader>p "+p
 
 " delete to void register and paste
 vnoremap <Leader>p "_dp
