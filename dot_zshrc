@@ -68,7 +68,7 @@ alias vim='nvim'
 # Make ls colorize output and show human readable sizes by default
 alias ls='ls --human-readable --color=auto'
 
-alias cat='bat --theme="ansi" --number'
+alias cat='bat --theme="ansi" --style=plain'
 
 # Make zsh autocomplete git commands
 autoload -Uz compinit && compinit
