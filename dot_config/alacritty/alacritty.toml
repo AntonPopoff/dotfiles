@@ -5,6 +5,7 @@ import = ["kanagawa_dragon.toml"]
 padding.x = 5
 padding.y = 5
 opacity = 0.85
+startup_mode = "Maximized"
 
 [mouse]
 hide_when_typing = true
