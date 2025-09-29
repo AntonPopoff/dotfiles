@@ -39,7 +39,7 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 
 " disable search highlighting temporary when <Esc> is hit
-nnoremap <silent> <Leader>so :nohlsearch<CR>
+nnoremap <silent> <Leader>/ :nohlsearch<CR>
 
 " center cursor when searching
 nmap n nzz
@@ -51,12 +51,12 @@ nmap <C-u> <C-u>zz
 
 " map search actions to vim keys (Android Studio/Idea Actions)
 nmap <C-c> <Action>(EditorEscape)
-nmap <Leader>pf <Action>(SearchEverywhere)
-nmap <Leader>pg <Action>(FindInPath)
+nmap <Leader>ff <Action>(SearchEverywhere)
+nmap <Leader>fg <Action>(FindInPath)
 
 " map format actions (Android Studio/Idea Actions)
-nmap <F3> <Action>(ShowReformatFileDialog)
-xmap <F3> <Action>(ShowReformatFileDialog)
+nmap <Leader>fc <Action>(ShowReformatFileDialog)
+xmap <Leader>fc <Action>(ShowReformatFileDialog)
 
 " map Run & Debug keys
 nmap <F5> <Action>(Debug)
@@ -66,4 +66,3 @@ nmap <F6> <Action>(Resume)
 " toggle breakpoints (Android Studio/Idea actions)
 nmap <Leader>b <Action>(ToggleLineBreakpoint)
 nmap <Leader>c <Action>(AddConditionalBreakpoint)
-
