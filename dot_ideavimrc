@@ -23,14 +23,16 @@ nnoremap <Space> <nop>
 let mapleader=" "
 
 " OS clipboard yank mappings
+vnoremap <Leader>y "+y
 nnoremap <Leader>y "+y
 nnoremap <Leader>yy "+yy
 
 " OS clipboard paste mappings
-noremap <Leader>p "+p
+nnoremap <Leader>p "+p
+vnoremap <Leader>p "+p
 
 " delete to void register and paste
-vnoremap <Leader>p "_dp
+vnoremap <Leader>P "_dp
 
 " disable the arrow keys just in case
 noremap <Left> <nop>
