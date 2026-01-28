@@ -1,3 +1,6 @@
+# Enable zsh autocompletion for git etc.
+autoload -Uz compinit && compinit
+
 # Fuzzy cd
 function jf {
     local start_location=''
@@ -8,7 +11,7 @@ function jf {
         start_location="$HOME"
     fi
 
-    local target_dir="$(fd --hidden --type directory . "$start_location" | fzf)"
+    local target_dir=$(fd --hidden --type=directory . "$start_location" | fzf)
 
     if [[ -n "$target_dir" ]]; then
         cd "$target_dir"
@@ -25,30 +28,77 @@ function ef {
         start_location="$HOME"
     fi
 
-    local target_file=$(fd --hidden --type file . "$start_location" | fzf --preview 'bat --color=always --number --theme="ansi" {}')
+    local target_file=$(fd --hidden --type=file . "$start_location" \
+        | fzf --preview 'bat --color=always --number --theme=ansi {}')
 
     if [[ -n "$target_file" ]]; then
         nvim "$target_file"
     fi
 }
 
-# Interactive Git Switch Branch via fzf
+# Helper function to check if we are inside of a git repo
+function in_git_repo() {
+    git rev-parse --is-inside-work-tree >/dev/null 2>&1
+}
+
+# Interactive git switch with fzf
 function gsb() {
+    in_git_repo || return
 
-    # Show branches including remote
-    # Remove leading spaces and asterisks
-    # Remove duplicated branch names
-    # Feed the output to fzf
-    local target=$(git branch --all | \
-        sed -E 's/^\*?\s{1,2}//' | \
-        sed -E 's/remotes\/origin\///' | \
-        awk '!branches[$0]++' | \
-        fzf)
+    # Prepare git log command for fzf preview
+    local preview_args="--oneline --graph --color=always"
+    local preview_cmd="git log $preview_args {} 2> /dev/null || git log $preview_args origin/{} 2> /dev/null"
 
-    if [[ -n $target ]]; then
-        git switch $target
+    # Get all branches' short names without asterisks or leading spaces
+    #
+    # With awk perform the following filtering:
+    # 1. Remove origin/HEAD reference
+    # 2. Remove origin prefix
+    # 3. Remove duplicated branches
+    #
+    # In the end feed the output to fzf
+    #
+    local target=$(git for-each-ref --format='%(refname:short)' \
+        | awk '$0 == "origin" {next} {sub(/^origin\//,"")} !seen[$0]++' \
+        | fzf --preview "$preview_cmd")
+
+    if [[ -n "$target" ]]; then
+        git switch "$target"
     fi
 }
+
+# Fuzzy select a file to show at a specific revision
+function gcat() {
+    in_git_repo || return
+
+    if [[ -z "$1" ]]; then
+        return
+    fi
+
+    # List files from a specific revision and feed the output to fzf
+    local file=$(git ls-tree -r --name-only "$1" \
+        | fzf --preview "git show $1:{} | bat --theme=ansi --number --color=always --file-name={}")
+
+    # Show file contents at a specific revision
+    if [[ -n "$file" ]]; then
+        git show "$1:$file" | bat --theme=ansi --number --color=always --file-name=$file
+    fi
+}
+
+# Git branch autocompletion for gcat command
+function _gcat() {
+    in_git_repo || return
+
+    # Prepare array of branch names. If a local and a remote branches point to the same commit remove remote branch from candidates
+    local -a branches=(${(f)$(git for-each-ref --format='%(objectname) %(refname:short)' \
+        | awk '!branches[$1]++ { print $2 }')})
+
+    # Populate autocompletion candidates list
+    _arguments -C "1:branch:(${branches})"
+}
+
+# Setup autocompletion for gcat command
+compdef _gcat gcat
 
 # Add current git branch name to zsh prompt if inside of a git repository
 function parse_git_branch() {
@@ -68,11 +118,8 @@ alias vim='nvim'
 # Make ls colorize output and show human readable sizes by default
 alias ls='ls --human-readable --color=auto'
 
-alias cat='bat --theme="ansi" --style=plain'
+alias cat='bat --theme=ansi --style=plain'
 alias top='btop'
-
-# Make zsh autocomplete git commands
-autoload -Uz compinit && compinit
 
 # Set custom zsh prompt
 setopt PROMPT_SUBST
