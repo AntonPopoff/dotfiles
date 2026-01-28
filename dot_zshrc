@@ -81,7 +81,7 @@ function gcat() {
 
     # Show file contents at a specific revision
     if [[ -n "$file" ]]; then
-        git show "$1:$file" | bat --theme=ansi --number --color=always --file-name=$file
+        git show "$1:$file" | bat --theme=ansi --number --color=always --file-name="$file"
     fi
 }
 
