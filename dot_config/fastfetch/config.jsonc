@@ -32,7 +32,5 @@
     "colors"
   ],
   "logo": {
-      "type": "file",
-      "source": "~/.config/fastfetch/berserk.txt"
   }
 }
