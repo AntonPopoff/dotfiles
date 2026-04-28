@@ -1,139 +1,74 @@
-# Enable zsh autocompletion for git etc.
+# Load and enable zsh autocompletion module
 autoload -Uz compinit && compinit
 
-# Fuzzy cd
-function jf {
-    local start_location=''
+# Improve autocompletion menu
+zstyle ':completion:*' menu select                  # Make the menu navigable with arrow keys
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # Case-insensitive completion
 
-    if [[ -n "$1" ]]; then
-        start_location="$1"
-    else
-        start_location="$HOME"
-    fi
+# Setup zsh history files and size
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=10000
+setopt SHARE_HISTORY        # Share zsh history across all sessions
+setopt HIST_IGNORE_ALL_DUPS # Delete old recorded entry if new entry is a duplicate
+setopt HIST_IGNORE_SPACE    # Don't record entries starting with a space
+setopt HIST_REDUCE_BLANKS   # Prevent irrelevant whitespace from being added to the history
 
-    local target_dir=$(fd --hidden --type=directory . "$start_location" | fzf)
+# Load zsh VCS module for git branch prompt
+autoload -Uz vcs_info
 
-    if [[ -n "$target_dir" ]]; then
-        cd "$target_dir"
-    fi
-}
-
-# Fuzzy find and edit (nvim)
-function ef {
-    local start_location=''
-
-    if [[ -n "$1" ]]; then
-        start_location="$1"
-    else
-        start_location="$HOME"
-    fi
-
-    local target_file=$(fd --hidden --type=file . "$start_location" \
-        | fzf --preview 'bat --color=always --number --theme=ansi {}')
-
-    if [[ -n "$target_file" ]]; then
-        nvim "$target_file"
-    fi
-}
-
-# Helper function to check if we are inside of a git repo
-function in_git_repo() {
-    git rev-parse --is-inside-work-tree >/dev/null 2>&1
-}
-
-# Interactive git switch with fzf
-function gsb() {
-    in_git_repo || return
-
-    # Prepare git log command for fzf preview
-    local preview_args="--oneline --graph --color=always"
-    local preview_cmd="git log $preview_args {} 2> /dev/null || git log $preview_args origin/{} 2> /dev/null"
-
-    # Get all branches' short names without asterisks or leading spaces
-    #
-    # With awk perform the following filtering:
-    # 1. Remove origin/HEAD reference
-    # 2. Remove origin prefix
-    # 3. Remove duplicated branches
-    #
-    # In the end feed the output to fzf
-    #
-    local target=$(git for-each-ref --format='%(refname:short)' \
-        | awk '$0 == "origin" {next} {sub(/^origin\//,"")} !seen[$0]++' \
-        | fzf --preview "$preview_cmd")
-
-    if [[ -n "$target" ]]; then
-        git switch "$target"
-    fi
-}
-
-# Fuzzy select a file to show at a specific revision
-function gcat() {
-    in_git_repo || return
-
-    if [[ -z "$1" ]]; then
-        return
-    fi
-
-    # List files from a specific revision and feed the output to fzf
-    local file=$(git ls-tree -r --name-only "$1" \
-        | fzf --preview "git show $1:{} | bat --theme=ansi --number --color=always --file-name={}")
-
-    # Show file contents at a specific revision
-    if [[ -n "$file" ]]; then
-        git show "$1:$file" | bat --theme=ansi --number --color=always --file-name="$file"
-    fi
-}
-
-# Git branch autocompletion for gcat command
-function _gcat() {
-    in_git_repo || return
-
-    # Prepare array of branch names. If a local and a remote branches point to the same commit remove remote branch from candidates
-    local -a branches=(${(f)$(git for-each-ref --format='%(objectname) %(refname:short)' \
-        | awk '!branches[$1]++ { print $2 }')})
-
-    # Populate autocompletion candidates list
-    _arguments -C "1:branch:(${branches})"
-}
-
-# Setup autocompletion for gcat command
-compdef _gcat gcat
-
-# Add current git branch name to zsh prompt if inside of a git repository
-function parse_git_branch() {
-    local current_branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-
-    if [[ -z $current_branch ]]; then
-        echo ""
-    else
-        echo "[$current_branch] "
-    fi
-}
-
-# Neovim Aliases
-alias vi='nvim'
-alias vim='nvim'
-
-# Make ls colorize output and show human readable sizes by default
-alias ls='ls --human-readable --color=auto'
-
-alias cat='bat --theme=ansi --style=plain'
-alias top='btop'
+# Setup vcs_info module to output git branch name
+precmd() { vcs_info }
+zstyle ':vcs_info:*' enable git                  # Enable git repo checking
+zstyle ':vcs_info:git:*' formats '%F{34}[%b]%f ' # Output only branch name
 
 # Set custom zsh prompt
 setopt PROMPT_SUBST
 
-# Git branch prompt
-PROMPT=$'%B%F{blue}$(print -rD $PWD)%f%F{34} $(parse_git_branch)%f>%b '
+# Custom prompt with custom colors and git branch name
+PROMPT='%B%F{blue}%~%f ${vcs_info_msg_0_}>%b '
 
-# Add Gemini API Key environment variable
-if [[ -f ".geminiapi" ]]; then
-    source .geminiapi
+# Aliases and setup of custom commands
+if command -v fzf &> /dev/null; then
+    source <(fzf --zsh)
+
+    if [[ -f "$HOME/.zsh/fzf-git.sh/fzf-git.sh" ]]; then
+        source "$HOME/.zsh/fzf-git.sh/fzf-git.sh"
+
+        # Remap fzf git branches command so it won't clash with tmux
+        bindkey '^Gb' fzf-git-branches-widget  # Ctrl-g + b
+    fi
+fi
+
+# Setup zoxide and set it's alias to cd
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init zsh)"
+    alias cd='z'
+fi
+
+# Setup eza's alias
+if command -v eza &> /dev/null; then
+    alias ls='eza --long --all'
+fi
+
+# Setup btop's alias
+if command -v btop &> /dev/null; then
+    alias top='btop'
+fi
+
+# Setup nvim's alias
+if command -v nvim &> /dev/null; then
+    alias vi='nvim'
+    alias vim='nvim'
+fi
+
+# Setup bat's alias
+if command -v bat &> /dev/null; then
+    alias cat='bat --theme=ansi --style=plain'
 fi
 
 # Enter tmux session on startup
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+if [[ -z "$TMUX" && -n "$PS1" ]] && command -v tmux &> /dev/null; then
     tmux attach-session || tmux new-session
 fi
 
