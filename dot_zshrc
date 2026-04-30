@@ -1,3 +1,8 @@
+# Add local binaries to path
+if [[ -d "$HOME/.local/bin" ]]; then
+    path+="$HOME/local/.bin"
+fi
+
 # Load and enable zsh autocompletion module
 autoload -Uz compinit && compinit
 
