@@ -33,18 +33,6 @@ setopt PROMPT_SUBST
 # Custom prompt with custom colors and git branch name
 PROMPT='%B%F{blue}%~%f ${vcs_info_msg_0_}>%b '
 
-# Aliases and setup of custom commands
-if command -v fzf &> /dev/null; then
-    source <(fzf --zsh)
-
-    if [[ -f "$HOME/.zsh/fzf-git.sh/fzf-git.sh" ]]; then
-        source "$HOME/.zsh/fzf-git.sh/fzf-git.sh"
-
-        # Remap fzf git branches command so it won't clash with tmux
-        bindkey '^Gb' fzf-git-branches-widget  # Ctrl-g + b
-    fi
-fi
-
 # Setup zoxide and set it's alias to cd
 if command -v zoxide &> /dev/null; then
     eval "$(zoxide init zsh)"
@@ -67,13 +55,32 @@ if command -v nvim &> /dev/null; then
     alias vim='nvim'
 fi
 
-# Setup bat's alias
+# Setup bat's alias and defautl values
 if command -v bat &> /dev/null; then
-    alias cat='bat --theme=ansi --style=plain'
+    export BAT_STYLE='plain'
+    export BAT_THEME='ansi'
+    alias cat='bat'
 fi
 
 # Enter tmux session on startup
 if [[ -z "$TMUX" && -n "$PS1" ]] && command -v tmux &> /dev/null; then
     tmux attach-session || tmux new-session
+fi
+
+# Aliases and setup of custom commands
+if command -v fzf &> /dev/null; then
+    source <(fzf --zsh)
+
+    if [[ -f "$HOME/.zsh/fzf-git.sh/fzf-git.sh" ]]; then
+        source "$HOME/.zsh/fzf-git.sh/fzf-git.sh"
+
+        # Remap fzf git branches command so it won't clash with tmux
+        bindkey '^Gb' fzf-git-branches-widget  # Ctrl-g + b
+
+        # Define cat command for preview window
+        if command -v bat &> /dev/null; then
+            FZF_GIT_CAT='bat --color=always'
+        fi
+    fi
 fi
 
