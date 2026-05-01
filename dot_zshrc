@@ -62,14 +62,25 @@ if command -v bat &> /dev/null; then
     alias cat='bat'
 fi
 
-# Enter tmux session on startup
-if [[ -z "$TMUX" && -n "$PS1" ]] && command -v tmux &> /dev/null; then
-    tmux attach-session || tmux new-session
-fi
-
-# Aliases and setup of custom commands
+# Fzf setup and custom commands
 if command -v fzf &> /dev/null; then
     source <(fzf --zsh)
+
+    # Setting fd as the default source for fzf
+    export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --no-ignore'
+
+    # Apply the default command to CTRL-T as well
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+    # Use fd for generating path candidates for the ** trigger
+    _fzf_compgen_path() {
+        fd --hidden --exclude .git . "$1"
+    }
+
+    # Use fd for generating directory candidates for the ** trigger
+    _fzf_compgen_dir() {
+        fd --type d --hidden --exclude .git . "$1"
+    }
 
     if [[ -f "$HOME/.zsh/fzf-git.sh/fzf-git.sh" ]]; then
         source "$HOME/.zsh/fzf-git.sh/fzf-git.sh"
@@ -82,5 +93,10 @@ if command -v fzf &> /dev/null; then
             FZF_GIT_CAT='bat --color=always'
         fi
     fi
+fi
+
+# Enter tmux session on startup
+if [[ -z "$TMUX" && -n "$PS1" ]] && command -v tmux &> /dev/null; then
+    tmux attach-session || tmux new-session
 fi
 
