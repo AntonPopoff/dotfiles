@@ -33,6 +33,15 @@ setopt PROMPT_SUBST
 # Custom prompt with custom colors and git branch name
 PROMPT='%B%F{blue}%~%f ${vcs_info_msg_0_}>%b '
 
+# Improve less command default behavior
+# -i: Smart case search
+# -M: Detailed prompt at the bottom
+# -R: Output RAW control characters (REQUIRED for colors)
+# -F: Quit automatically if content fits on one screen
+# -X: Keep content on screen after exiting
+# -x4: Set tab width to 4 spaces
+export LESS="-i -M -R -F -X -x4"
+
 # Setup zoxide and set it's alias to cd
 if command -v zoxide &> /dev/null; then
     eval "$(zoxide init zsh)"
@@ -59,6 +68,10 @@ fi
 if command -v bat &> /dev/null; then
     export BAT_STYLE='plain'
     export BAT_THEME='ansi'
+
+    # Setup bat as the default input processor for less
+    export LESSOPEN="| bat --color=always --style=plain %s"
+
     alias cat='bat'
 fi
 
