@@ -24,8 +24,8 @@ autoload -Uz vcs_info
 
 # Setup vcs_info module to output git branch name
 precmd() { vcs_info }
-zstyle ':vcs_info:*' enable git                  # Enable git repo checking
-zstyle ':vcs_info:git:*' formats '%F{34}[%b]%f ' # Output only branch name
+zstyle ':vcs_info:*' enable git                   # Enable git repo checking
+zstyle ':vcs_info:git:*' formats '%F{34}%s:%b%f ' # Output only branch name
 
 # Set custom zsh prompt
 setopt PROMPT_SUBST
