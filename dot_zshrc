@@ -1,36 +1,71 @@
-# Add local binaries to path
+# Enter tmux session during startup 
+# NO_TMUX=1 - skip tmux autostart
+if [[ -z "$TMUX" && -o interactive && -z "$NO_TMUX" ]] && command -v tmux &> /dev/null; then
+    exec tmux new-session -A -s main
+fi
+
+# Allow `# comments` on the command line
+setopt INTERACTIVE_COMMENTS
+
+# Setup zsh history files and size
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=128000
+SAVEHIST=128000
+setopt SHARE_HISTORY        # Share zsh history across all sessions
+setopt HIST_IGNORE_ALL_DUPS # Delete old recorded entry if new entry is a duplicate
+setopt HIST_IGNORE_SPACE    # Don't record entries starting with a space
+setopt HIST_REDUCE_BLANKS   # Prevent irrelevant whitespace from being added to the history
+setopt EXTENDED_HISTORY     # Store when each command ran and how long it took
+setopt HIST_VERIFY          # History expansion (!!, !$, !cmd) is put back on the prompt first instead of being executed immediately
+
+# Mark $PATH array as unique to prevent nested shells from appending duplicates
+typeset -U path
+
+# If .local directory exists add it to the path
 if [[ -d "$HOME/.local/bin" ]]; then
-    path+="$HOME/.local/bin"
+    # Prepend the directory so the .local binaries can take precedence
+    path=("$HOME/.local/bin" $path)
+fi
+
+# If Android SDK directory exists add it to the path
+if [[ -d "$HOME/Android/Sdk" ]]; then
+    export ANDROID_HOME="$HOME/Android/Sdk"
+    path+=("$ANDROID_HOME/platform-tools" "$ANDROID_HOME/emulator")
+fi
+
+# Use emacs keymaps by default
+bindkey -e
+
+# Use Neovim as default editor if installed
+if command -v nvim &> /dev/null; then
+    export EDITOR=nvim
+    export VISUAL=nvim
 fi
 
 # Load and enable zsh autocompletion module
 autoload -Uz compinit && compinit
 
-# Improve autocompletion menu
+# Improve autocomplete menu
 zstyle ':completion:*' menu select                  # Make the menu navigable with arrow keys
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # Case-insensitive completion
 
-# Setup zsh history files and size
-HISTFILE="$HOME/.zsh_history"
-HISTSIZE=10000
-SAVEHIST=10000
-setopt SHARE_HISTORY        # Share zsh history across all sessions
-setopt HIST_IGNORE_ALL_DUPS # Delete old recorded entry if new entry is a duplicate
-setopt HIST_IGNORE_SPACE    # Don't record entries starting with a space
-setopt HIST_REDUCE_BLANKS   # Prevent irrelevant whitespace from being added to the history
-
-# Load zsh VCS module for git branch prompt
+# Load vcs_info built-in module for reading git state for the prompt
 autoload -Uz vcs_info
 
-# Setup vcs_info module to output git branch name
-precmd() { vcs_info }
-zstyle ':vcs_info:*' enable git                   # Enable git repo checking
-zstyle ':vcs_info:git:*' formats '%F{34}%s:%b%f ' # Output only branch name
+# Append vsc_info pre-prompt hook
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd vcs_info
 
-# Set custom zsh prompt
+zstyle ':vcs_info:*' enable git                   # Enable git repo checking
+zstyle ':vcs_info:git:*' formats '%F{34}%s:%b%f ' # Output branch name only
+
+# Use 'actionformats' instead 'formats' to show current action while in the middle of something (merge, rebase, bisect)
+zstyle ':vcs_info:git:*' actionformats '%F{34}%s:%b%f %F{red}(%a)%f '
+
+# Enable zsh custom prompt
 setopt PROMPT_SUBST
 
-# Custom prompt with custom colors and git branch name
+# Set custom prompt with vibrant colors and git status
 PROMPT='%B%F{blue}%~%f ${vcs_info_msg_0_}>%b '
 
 # Improve less command default behavior
@@ -42,15 +77,20 @@ PROMPT='%B%F{blue}%~%f ${vcs_info_msg_0_}>%b '
 # -x4: Set tab width to 4 spaces
 export LESS="-i -M -R -F -X -x4"
 
-# Setup zoxide and set it's alias to cd
+# Enable zoxide if installed and replace cd command with it
 if command -v zoxide &> /dev/null; then
-    eval "$(zoxide init zsh)"
-    alias cd='z'
+    eval "$(zoxide init zsh --cmd cd)"
 fi
 
-# Setup eza's alias
+# Setup eza if installed
 if command -v eza &> /dev/null; then
-    alias ls='eza --long --all'
+    # --long - use long format by default
+    # --all - show hidden dot files
+    # --git - additionally show git status if inside a git's repo
+    # --group-directories-first - group directories and files together and show directories at the top
+    alias ls='eza --long --all --git --group-directories-first'
+    # Show file tree up to 3 levels deep
+    alias lt='eza --tree --level=3 --git-ignore'
 fi
 
 # Setup btop's alias
@@ -64,13 +104,23 @@ if command -v nvim &> /dev/null; then
     alias vim='nvim'
 fi
 
-# Setup bat's alias and defautl values
+# If ripgrep is installed supply a config file
+if command -v rg &> /dev/null; then
+    export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+fi
+
+# Setup bat's alias and default values
 if command -v bat &> /dev/null; then
+    # Setup bat's default format and color scheme
     export BAT_STYLE='plain'
     export BAT_THEME='ansi'
 
     # Setup bat as the default input processor for less
     export LESSOPEN="| bat --color=always --style=plain %s"
+
+    # Use bat to output colored man pages
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export MANROFFOPT="-c"
 
     alias cat='bat'
 fi
@@ -79,11 +129,11 @@ fi
 if command -v fzf &> /dev/null; then
     source <(fzf --zsh)
 
-    # Setting fd as the default source for fzf
-    export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --no-ignore'
-
-    # Apply the default command to CTRL-T as well
+    # Setting fd as the default file walker for fzf
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git --strip-cwd-prefix'
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    # Setting fd as the default directories walker for fzf
+    export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git --strip-cwd-prefix'
 
     # Use fd for generating path candidates for the ** trigger
     _fzf_compgen_path() {
@@ -106,10 +156,5 @@ if command -v fzf &> /dev/null; then
             FZF_GIT_CAT='bat --color=always'
         fi
     fi
-fi
-
-# Enter tmux session on startup
-if [[ -z "$TMUX" && -n "$PS1" ]] && command -v tmux &> /dev/null; then
-    tmux attach-session || tmux new-session
 fi
 
