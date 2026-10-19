@@ -67,11 +67,51 @@ zstyle ':vcs_info:git:*' formats '%F{34}%s:%b%f ' # Output branch name only
 # Use 'actionformats' instead 'formats' to show current action while in the middle of something (merge, rebase, bisect)
 zstyle ':vcs_info:git:*' actionformats '%F{34}%s:%b%f %F{red}(%a)%f '
 
+# Array containing current shell context information
+typeset -a ctx=()
+
+# Check for an active SSH shell
+if [[ -n "$SSH_CONNECTION" || -n "$SSH_TTY" ]]; then
+    ctx+=('%F{yellow}ssh:%n@%m%f')
+fi
+
+# Check for an isolated shells like docker or podman containers
+if [[ -n "$CONTAINER_ID" ]]; then
+    ctx+=("%F{magenta}ctr:${CONTAINER_ID}%f")
+elif [[ -f /run/.toolboxenv ]]; then
+    ctx+=('%F{magenta}ctr:toolbox%f')
+elif [[ -f /run/.containerenv ]]; then
+    ctx+=('%F{magenta}ctr:podman%f')
+elif [[ -f /.dockerenv ]]; then
+    ctx+=('%F{magenta}ctr:docker%f')
+elif [[ -n "$container" ]]; then
+    ctx+=("%F{magenta}ctr:${container}%f")
+fi
+
+# Check for temporary sub-shells like "chezmoi cd"
+if [[ -n "$CHEZMOI" ]]; then
+    ctx+=('%F{cyan}chezmoi%f')
+fi
+
+# Check for a custom zsh configuration
+if [[ -n "$ZDOTDIR" && "$ZDOTDIR" != "$HOME" ]]; then
+    ctx+=("%F{cyan}zdot:${ZDOTDIR:t}%f")
+fi
+
+# Join context values to string and separate by space character
+PROMPT_CONTEXT="${(j: :)ctx}"
+
+if [[ -n "$PROMPT_CONTEXT" ]]; then
+    PROMPT_CONTEXT+=' '
+fi
+
+unset ctx
+
 # Enable zsh custom prompt
 setopt PROMPT_SUBST
 
-# Set custom prompt with vibrant colors and git status
-PROMPT='%B%F{blue}%~%f ${vcs_info_msg_0_}>%b '
+# Set custom prompt with current context info, git repo status and vibrant colors
+PROMPT='${PROMPT_CONTEXT}%B%F{blue}%~%f ${vcs_info_msg_0_}%(!.%F{red}#%f.>)%b '
 
 # Improve less command default behavior
 # -i: Smart case search
