@@ -1,0 +1,2 @@
+# Enable smart-case for ripgrep by default
+--smart-case
