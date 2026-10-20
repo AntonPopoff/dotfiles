@@ -18,11 +18,6 @@ setopt HIST_REDUCE_BLANKS   # Prevent irrelevant whitespace from being added to 
 setopt EXTENDED_HISTORY     # Store when each command ran and how long it took
 setopt HIST_VERIFY          # History expansion (!!, !$, !cmd) is put back on the prompt first instead of being executed immediately
 
-# Ctrl+X, then Ctrl+E: open the current command line in $EDITOR (nvim)
-autoload -Uz edit-command-line
-zle -N edit-command-line
-bindkey '^X^E' edit-command-line
-
 # Mark $PATH array as unique to prevent nested shells from appending duplicates
 typeset -U path
 
@@ -46,6 +41,11 @@ if command -v nvim &> /dev/null; then
     export EDITOR=nvim
     export VISUAL=nvim
 fi
+
+# Ctrl+X, then Ctrl+E: open the current command line in $EDITOR (nvim)
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
 
 # Load and enable zsh autocompletion module
 autoload -Uz compinit && compinit
