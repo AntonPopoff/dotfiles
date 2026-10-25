@@ -1,70 +1,85 @@
-syntax on		    " syntax highlighting
-set ruler		    " show the cursor position all the time
-set showcmd		    " display incomplete commands
-set wildmenu		" display completion matches in a status line
-set number          " show line numbers
-set relativenumber	" display relative line numbers
-set scrolloff=5		" keep at least 5 lines above and below the cursor
-set history=200		" keep 200 lines of command line history
-set laststatus=2	" display the status line at the bottom
-set ignorecase		" ignore case during search operations
-set encoding=utf-8	" set vim-wide UTF-8 encoding
-set cursorline		" Highlight the current line
-set incsearch		" Do incremental searching
-set hlsearch		" Highlight search result
+" IdeaVim config start!
 
-" tabs and indentation settings
-set expandtab 		" use space characters instead of tabs
-set softtabstop=4	" insert 4 spaces when tab button pressed
-set shiftwidth=4	" use 4 spaces for indentation
+" Map Leader key to Space (must come before any <Leader> mappings)
+let mapleader = " "
 
-" map the leader key
-nnoremap <Space> <nop>
-let mapleader=" "
+" Options
+syntax on           " Enable syntax highlighting
+set ruler           " Show the cursor position all the time
+set wildmenu        " Display completion matches in a status line
+set laststatus=2    " Always display the status line
+set encoding=utf-8  " Use UTF-8 encoding
+set cursorline      " Highlight the current line
+set number          " Show line numbers
+set relativenumber  " Make line numbers relative
+set scrolloff=5     " Keep at least 5 lines above and below the cursor
+set showcmd         " Display incomplete commands
+set history=200     " Keep 200 lines of command line history
+set ignorecase      " Make search case insensitive
+set smartcase       " Make search case sensitive if the pattern contains any uppercase letter
+set incsearch       " Show matches while typing the search pattern
+set hlsearch        " Highlight search results
 
-" OS clipboard yank mappings
-vnoremap <Leader>y "+y
-nnoremap <Leader>y "+y
-nnoremap <Leader>yy "+yy
+" Tab and indentation options
+set expandtab       " Use spaces instead of tab characters
+set softtabstop=4   " Insert 4 spaces when Tab is pressed
+set shiftwidth=4    " Use 4 spaces for indentation
 
-" OS clipboard paste mappings
-nnoremap <Leader>p "+p
-vnoremap <Leader>p "+p
-
-" delete to void register and paste
-vnoremap <Leader>P "_dp
-
-" disable the arrow keys just in case
-noremap <Left> <nop>
-noremap <Right> <nop>
-noremap <Up> <nop>
-noremap <Down> <nop>
-
-" disable search highlighting temporary when <Esc> is hit
-nnoremap <silent> <Leader>/ :nohlsearch<CR>
-
-" center cursor when searching
-nmap n nzz
-nmap N Nzz
-
-" center cursor when scrolling text
-nmap <C-d> <C-d>zz
-nmap <C-u> <C-u>zz
-
-" map search actions to vim keys (Android Studio/Idea Actions)
+" Vim bindings
+nnoremap <Space> <Nop>
 nmap <C-c> <Action>(EditorEscape)
+
+" Disable arrow keys
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+
+" Clear search highlighting (mirrors Neovim's default <C-l>)
+nnoremap <silent> <C-l> :nohlsearch<CR>
+
+" Clipboard and yank register mappings
+nnoremap <Leader>yy "+yy
+nnoremap <Leader>y "+y
+xnoremap <Leader>y "+y
+nnoremap <Leader>p "+p
+xnoremap <Leader>p "+p
+nnoremap <Leader>P "+P
+xnoremap <Leader>P "_dP
+
+" Split panes mappings
+nmap <Leader>wv <Action>(SplitVertically)
+nmap <Leader>wh <Action>(SplitHorizontally)
+nnoremap <Leader>j <C-w>j
+nnoremap <Leader>k <C-w>k
+nnoremap <Leader>h <C-w>h
+nnoremap <Leader>l <C-w>l
+
+" Place cursor at the center of the screen while scrolling
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap <C-f> <C-f>zz
+nnoremap <C-b> <C-b>zz
+
+" Place search result at the center of the screen
+nnoremap n nzz
+nnoremap N Nzz
+
+" Search actions
 nmap <Leader>ff <Action>(SearchEverywhere)
 nmap <Leader>fg <Action>(FindInPath)
+nmap <Leader>fr <Action>(FindUsages)
 
-" map format actions (Android Studio/Idea Actions)
+" Code actions
+nmap <Leader>rn <Action>(RenameElement)
 nmap <Leader>fc <Action>(ShowReformatFileDialog)
 xmap <Leader>fc <Action>(ShowReformatFileDialog)
 
-" map Run & Debug keys
+" Run and debug actions
 nmap <F5> <Action>(Debug)
 nmap <S-F5> <Action>(Stop)
 nmap <F6> <Action>(Resume)
 
-" toggle breakpoints (Android Studio/Idea actions)
+" Breakpoint actions
 nmap <Leader>b <Action>(ToggleLineBreakpoint)
 nmap <Leader>c <Action>(AddConditionalBreakpoint)
