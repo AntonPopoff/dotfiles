@@ -252,11 +252,20 @@ vim.keymap.set('n', '<M-s>', '<C-w>5-', { desc = 'Decrease split height' })
 vim.keymap.set('n', '<M-w>', '<C-w>5>', { desc = 'Increase split width' })
 vim.keymap.set('n', '<M-n>', '<C-w>5<', { desc = 'Decrease split width' })
 
--- Place cursor at the center of the screen while scrolling
-vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll half page down (centered)' })
-vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll half page up (centered)' })
-vim.keymap.set('n', '<C-f>', '<C-f>zz', { desc = 'Scroll page down (centered)' })
-vim.keymap.set('n', '<C-b>', '<C-b>zz', { desc = 'Scroll page up (centered)' })
+-- Place the cursor at the center of the screen after scroll actions
+-- Execute the commands via vim.cmd to prevent screen flickering
+
+-- Helper function to replace terminal sequences like <C-x> with the real internal key codes
+-- Return a function which executes the parsed command
+local function scroll_and_center(key_seq)
+    local prepared = vim.api.nvim_replace_termcodes(key_seq, true, false, true)
+    return function() vim.cmd('normal!' .. prepared) end
+end
+
+vim.keymap.set('n', '<C-d>', scroll_and_center('<C-d>zz'), { desc = 'Scroll half page down (centered)' })
+vim.keymap.set('n', '<C-u>', scroll_and_center('<C-u>zz'), { desc = 'Scroll half page up (centered)' })
+vim.keymap.set('n', '<C-f>', scroll_and_center('<C-f>zz'), { desc = 'Scroll page down (centered)' })
+vim.keymap.set('n', '<C-b>', scroll_and_center('<C-b>zz'), { desc = 'Scroll page up (centered)' })
 
 -- Place search result at the center of the screen and open folds
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result (centered)' })
