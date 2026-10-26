@@ -191,7 +191,12 @@ vim.lsp.enable('clangd')                       -- Enable clangd (C/C++ language 
 vim.diagnostic.config({ virtual_text = true }) -- Show diagnostic messages as virtual text after the code
 
 -- Load and setup autocompletion plugin
-require('blink.cmp').setup({})
+require('blink.cmp').setup({
+    sources = {
+        -- Remove 'buffer' because we don't want plain text completions
+        default = { 'lsp', 'path', 'snippets' },
+    },
+})
 
 -- Register LSP attach autocommand to setup mappings, etc.
 vim.api.nvim_create_autocmd('LspAttach', {
